@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<div class="outer">
+<div class="title">
+    <h1>Example Flask App</h1>
+</div>
+<div class="body">
+    <p>Create a new record in the MongoDB database collection.</p>
+    <form method="POST">
+        <p>Your name: <input type="text" id="fname" name="fname"><br></p>
+        <p>Message: <input type="text" id="fmessage" name="fmessage" style="height:200px"><br></p>
+        <p><a href="{{ url_for('read')}}">Cancel</a> <input type="submit" name="post-btn" value="Post"></p>
+    </form>
+</div>
+<div class="footer">The source code for this example app is available on Github.</div>
+</div>
+</body>
+</html>

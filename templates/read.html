@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<div class="outer">
+<div class="title">
+    <h1>Example Flask App</h1>
+</div>
+<div class="body">
+    <p>This page shows information pulled from a MongoDB database collection. <a href="{{ url_for('create')}}">Click here</a> to add record to this collection.
+            
+        {% for row in rows %}
+        <div>
+            <hr class="solid">
+            <p style="font-size:12px">Posted by {{row.name}} at {{ row.time }} </br>
+                <a href="{{ url_for('edit',mongoid=row._id)}}">Edit</a> | <a href="{{ url_for('delete',mongoid=row._id)}}">Delete</a> </br></p>
+                {{ row.message }}
+                
+            </div>
+            {%endfor%}
+        
+    </p>
+</div>
+<div class="footer">The source code for this example app is available on Github.</div>
+</div>
+</body>
+</html>
