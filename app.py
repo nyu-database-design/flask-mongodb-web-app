@@ -43,7 +43,7 @@ def read():
                                     password=config['MONGO_PASSWORD'],
                                     authSource=config['MONGO_DBNAME'])
     collection = connection[config['MONGO_DBNAME']]["exampleapp"]
-    docs = collection.find({})
+    docs = collection.find({}).sort({ 'time': 0})
     return render_template('read.html', rows=docs)
 
 
