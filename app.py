@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
 
-from flask import Flask, render_template, request, abort, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for
 from markupsafe import escape
 import pymongo
 import datetime
 from bson.objectid import ObjectId
 import os
-import hmac
 
 # instantiate the app
 app = Flask(__name__)
@@ -74,7 +73,11 @@ def create_post():
     collection = connection[config['MONGO_DBNAME']]["exampleapp"]
     dt = datetime.datetime.now()
     dt_fmt = dt.strftime("%H:%M on %d %B %Y")
-    doc_to_insert = {"name": name, "message": message, "time": dt_fmt}
+    doc_to_insert = {
+        "name": name,
+        "message": message, 
+        "time": dt_fmt
+    }
     collection.insert(doc_to_insert)
 
     return redirect(url_for('read'))
@@ -93,7 +96,7 @@ def edit(mongoid):
     collection = connection[config['MONGO_DBNAME']]["exampleapp"]
     doc = collection.find_one({"_id": ObjectId(mongoid)})
     # print(doc)
-    return render_template('edit.html',mongoid=mongoid, doc=doc)
+    return render_template('edit.html', mongoid=mongoid, doc=doc)
 
 
 @app.route('/edit/<mongoid>', methods=['POST'])
