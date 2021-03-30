@@ -8,7 +8,7 @@
     <div>
         <hr class="solid">
         <p class="post">
-            Posted by {{row.name}} at {{ row.created_at }}
+            Posted by {{row.name}} at {{ row.created_at.strftime("%H:%M on %d %B %Y") }}
             </br>
             <a href="{{ url_for('edit',mongoid=row._id)}}">Edit</a> | <a href="{{ url_for('delete',mongoid=row._id)}}">Delete</a>
             </br>
