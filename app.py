@@ -43,7 +43,7 @@ def read():
                                     password=config['MONGO_PASSWORD'],
                                     authSource=config['MONGO_DBNAME'])
     collection = connection[config['MONGO_DBNAME']]["exampleapp"]
-    docs = collection.find({}).sort({ 'time': 0})
+    docs = collection.find({}).sort({ 'time': pymongo.DESCENDING}) # sort in descending order of time
     return render_template('read.html', rows=docs)
 
 
