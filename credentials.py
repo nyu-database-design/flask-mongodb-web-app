@@ -15,6 +15,9 @@ def get():
     for line in f:
         # split by =
         line=line.strip() # remove line break
+        # remove any comment from the line
+        if '#' in line:
+            line = line[:line.find('#')]
         setting = line.split('=') # split key and value apart
         if len(setting) == 2:
             key, value = setting

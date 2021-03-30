@@ -53,7 +53,7 @@ pip3 install -r requirements.txt
 
 ### Run the app
 
-1. define two environment variables from the command line: `export FLASK_APP=myapp` and `export FLASK_ENV=development`
+1. define two environment variables from the command line: `export FLASK_APP=app` and `export FLASK_ENV=development`
 1. copy the file named `env.example` into a new file named `.env`, and enter your own MongoDB database connection credentials into that file where indicated.
 1. start flask with `flask run` - this will output an address at which the app is running locally, e.g. https://127.0.0.1:5000. Visit that address in a web browser.
 
@@ -66,5 +66,5 @@ The following steps outline how to host this application on NYU's **i6**.cims.ny
 1. navigate into your web server account's `public_html` directory using `cd public_html`.
 1. clone this repository with `git clone url-to-this-repository`
 1. once cloned, copy the file named `env.example` into a new file named `.env` (using `cp env.example .env`), and enter your own MongoDB database connection credentials into that file where indicated. Save it.
-1. Make the files named `flask.cgi` and `myapp.py` executable by all with the command, `chmod u+x flask.cgi` and `chmod u+x myapp.py`.
+1. Make the files named `flask.cgi` and `app.py` executable by all with the command, `chmod u+x flask.cgi` and `chmod u+x app.py`.
 1. Your app should now be live at https://i6.cims.nyu.edu/~$USER/$flask-app-directory/flask.cgi, where `$USER` is replaced with your own **i6** username and `$flask-app-directory` is replaced with the name of the sub-directory within `public_html` where your flask app code resides.

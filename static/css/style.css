@@ -16,6 +16,10 @@ main {
   margin-bottom: 5px;
 }
 
+p.post {
+  font-size: 12px;
+}
+
 footer {
   margin-bottom: 5px;
 }
