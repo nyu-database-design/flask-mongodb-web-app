@@ -43,7 +43,7 @@ def read():
                                     password=config['MONGO_PASSWORD'],
                                     authSource=config['MONGO_DBNAME'])
     collection = connection[config['MONGO_DBNAME']]["exampleapp"]
-    docs = collection.find({}).sort({ 'time': pymongo.DESCENDING}) # sort in descending order of time
+    docs = collection.find({}).sort({ 'created_at': pymongo.DESCENDING}) # sort in descending order of time
     return render_template('read.html', rows=docs)
 
 
@@ -70,12 +70,11 @@ def create_post():
                                     password=config['MONGO_PASSWORD'],
                                     authSource=config['MONGO_DBNAME'])
     collection = connection[config['MONGO_DBNAME']]["exampleapp"]
-    dt = datetime.datetime.now()
-    dt_fmt = dt.strftime("%H:%M on %d %B %Y")
+    dt = datetime.datetime.utcnow()
     doc_to_insert = {
         "name": name,
         "message": message, 
-        "time": dt_fmt
+        "created_at": dt
     }
     collection.insert(doc_to_insert)
 
