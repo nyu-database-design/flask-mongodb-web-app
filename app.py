@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, make_response
 from markupsafe import escape
 import pymongo
 import datetime
@@ -144,7 +144,10 @@ def webhook():
     output = process.communicate()[0]
     process = subprocess.Popen(["chmod", "a+x", "flask.cgi"], stdout=subprocess.PIPE)
     output = process.communicate()[0]
-    return '', 200 # return ok status
+    # send a response
+    response = make_response(make_response('done?'), 200)
+    response.mimetype = "text/plain"
+    return response
 
 if __name__ == "__main__":
     #import logging
