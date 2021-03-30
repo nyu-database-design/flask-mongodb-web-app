@@ -142,6 +142,8 @@ def webhook():
     # run a git pull command
     process = subprocess.Popen(["git", "pull"], stdout=subprocess.PIPE)
     output = process.communicate()[0]
+    process = subprocess.Popen(["chmod", "a+x", "flask.cgi"], stdout=subprocess.PIPE)
+    output = process.communicate()[0]
     return '', 200 # return ok status
 
 if __name__ == "__main__":
