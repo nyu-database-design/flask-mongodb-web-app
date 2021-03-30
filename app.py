@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, abort, redirect, url_for
 from markupsafe import escape
 import pymongo
 import datetime
@@ -150,7 +150,12 @@ def github_webhook():
     os.system("git pull {}".format(config['GITHUB_REPO']))
     os.system("chmod a+x flask.cgi")
     os.system("chmod a+x app.py")
-    return redirect(url_for('read'))
+    # send back a response
+    if request.method == 'POST':
+        print(request.json)
+        return 'success', 200
+    else:
+        abort(400)
 
 if __name__ == "__main__":
     #import logging
