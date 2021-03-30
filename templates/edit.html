@@ -1,7 +1,7 @@
 {% extends 'base.html' %} {% block container %}
 <h2>Update</h2>
 <p>Edit a record in the MongoDB database collection.</p>
-<form method="POST">
+<form method="POST" action="{{ url_for('edit_post')}}">
   <p>
     Your name:
     <input type="text" id="fname" name="fname" value="{{doc.name}}" /><br />
