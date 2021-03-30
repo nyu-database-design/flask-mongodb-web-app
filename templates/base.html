@@ -11,6 +11,11 @@
     <div class="container">
       <header>
         <h1>Example Flask App Test</h1>
+        <p>
+          <a href="{{ url_for('home')}}">Home</a> |
+          <a href="/read">All posts</a> |
+          <a href="{{ url_for('create')}}">Create a post</a>
+        </p>
       </header>
       <main>{% block container %} {% endblock %}</main>
       <footer>

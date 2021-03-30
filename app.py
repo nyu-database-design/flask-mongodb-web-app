@@ -15,7 +15,7 @@ app = Flask(__name__)
 # load credentials and configuration options from .env file
 import credentials
 config = credentials.get()
-print(config)
+# print(config)
 
 # turn on debugging if in development mode
 if config['FLASK_ENV'] == 'development':
