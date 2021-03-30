@@ -132,8 +132,8 @@ def delete(mongoid):
     collection.find_one_and_delete({"_id": ObjectId(mongoid)})
     return redirect(url_for('read'))
 
-@app.route('/github-webhook', methods=['GET', 'POST'])
-def github_webhook():
+@app.route('/webhook', methods=['GET', 'POST'])
+def webhook():
     """
     Route for GitHub webhooks, which come as POST requests.
     Anytime new code is pushed to GitHub, we will receive a request at this route.
