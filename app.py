@@ -44,10 +44,7 @@ def read():
                                     authSource=config['MONGO_DBNAME'])
     collection = connection[config['MONGO_DBNAME']]["exampleapp"]
     docs = collection.find({})
-    rows = []
-    for doc in docs:
-        rows.append(doc)
-    return render_template('read.html', rows=rows)
+    return render_template('read.html', rows=docs)
 
 
 @app.route('/create')
