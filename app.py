@@ -8,20 +8,16 @@ from bson.objectid import ObjectId
 import os
 import hmac
 
+# instantiate the app
+app = Flask(__name__)
+
+
 # load credentials and configuration options from .env file
 import credentials
 config = credentials.get()
-mongo_host = config['MONGO_HOST']
-mongo_user = config['MONGO_USER']
-mongo_password = config['MONGO_PASSWORD']
-mongo_dbname = config['MONGO_DBNAME']
-mode = config['FLASK_ENV']
-secret_key = config['GITHUB_SECRET']
 
-# instantiate the app
-app = Flask(__name__)
 # turn on debugging if in development mode
-if mode == 'development':
+if config['FLASK_ENV'] == 'development':
     # turn on debugging, if in development
     app.debug = True # debug mnode
 
@@ -143,14 +139,17 @@ def github_webhook():
     Anytime new code is pushed to GitHub, we will receive a request at this route.
     Pulls the latest code from GitHub.
     """
-    signature = request.headers.get('X-Hub-Signature') 
-    sha, signature = signature.split('=')
-    secret = str.encode(config['SECRET_KEY'])
+    # signature = request.headers.get('X-Hub-Signature') 
+    # sha, signature = signature.split('=')
+    # secret = str.encode(config['SECRET_KEY'])
 
-    hashhex = hmac.new(secret, request.data, digestmod='sha1').hexdigest()
-    if hmac.compare_digest(hashhex, signature):
+    # hashhex = hmac.new(secret, request.data, digestmod='sha1').hexdigest()
+    # if hmac.compare_digest(hashhex, signature):
         # run a pull from GitHub to update the app's code
-        os.system("git pull {}".format(config['REPO']))
+        # os.system("git pull {}".format(config['REPO']))
+    os.system("git pull {}".format(config['GITHUB_REPO']))
+    os.system("chmod a+x flask.cgi")
+    os.system("chmod a+x app.py")
     return redirect(url_for('read'))
 
 if __name__ == "__main__":
