@@ -6,6 +6,7 @@ import pymongo
 import datetime
 from bson.objectid import ObjectId
 import os
+import subprocess
 
 # instantiate the app
 app = Flask(__name__)
@@ -135,6 +136,13 @@ def delete(mongoid):
     collection = connection[config['MONGO_DBNAME']]["exampleapp"]
     collection.find_one_and_delete({"_id": ObjectId(mongoid)})
     return redirect(url_for('read'))
+
+@app.route('/webhook', methods=['GET', 'POST'])
+def webhook():
+    # run a git pull command
+    process = subprocess.Popen(["git", "pull"], stdout=subprocess.PIPE)
+    output = process.communicate()[0]
+    return '', 200 # return ok status
 
 if __name__ == "__main__":
     #import logging
