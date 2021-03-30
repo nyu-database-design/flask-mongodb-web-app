@@ -6,6 +6,7 @@ import pymongo
 import datetime
 from bson.objectid import ObjectId
 import os
+import hmac
 
 # load credentials and configuration options from .env file
 import credentials
@@ -15,6 +16,7 @@ mongo_user = config['MONGO_USER']
 mongo_password = config['MONGO_PASSWORD']
 mongo_dbname = config['MONGO_DBNAME']
 mode = config['FLASK_ENV']
+secret_key = config['GITHUB_SECRET']
 
 # instantiate the app
 app = Flask(__name__)
@@ -39,11 +41,11 @@ def read():
     Route for GET requests to the read page.
     Displays some information for the user with links to other pages.
     """
-    connection = pymongo.MongoClient(mongo_host, 27017, 
-                                    username=mongo_user,
-                                    password=mongo_password,
-                                    authSource=mongo_dbname)
-    collection = connection[mongo_dbname]["exampleapp"]
+    connection = pymongo.MongoClient(config['MONGO_HOST'], 27017, 
+                                    username=config['MONGO_USER'],
+                                    password=config['MONGO_PASSWORD'],
+                                    authSource=config['MONGO_DBNAME'])
+    collection = connection[config['MONGO_DBNAME']]["exampleapp"]
     docs = collection.find({})
     rows = []
     for doc in docs:
@@ -69,10 +71,11 @@ def create_post():
     name = request.form['fname']
     message = request.form['fmessage']
 
-    connection = pymongo.MongoClient(mongo_host, 27017, username=mongo_user,
-                                     password=mongo_password,
-                                     authSource=mongo_dbname)
-    collection = connection[mongo_dbname]["exampleapp"]
+    connection = pymongo.MongoClient(config['MONGO_HOST'], 27017, 
+                                    username=config['MONGO_USER'],
+                                    password=config['MONGO_PASSWORD'],
+                                    authSource=config['MONGO_DBNAME'])
+    collection = connection[config['MONGO_DBNAME']]["exampleapp"]
     dt = datetime.datetime.now()
     dt_fmt = dt.strftime("%H:%M on %d %B %Y")
     doc_to_insert = {"name": name, "message": message, "time": dt_fmt}
@@ -87,10 +90,11 @@ def edit(mongoid):
     Route for GET requests to the edit page.
     Displays a form users can fill out to edit an existing record.
     """
-    connection = pymongo.MongoClient(mongo_host, 27017, username=mongo_user,
-                                     password=mongo_password,
-                                     authSource=mongo_dbname)
-    collection = connection[mongo_dbname]["exampleapp"]
+    connection = pymongo.MongoClient(config['MONGO_HOST'], 27017, 
+                                    username=config['MONGO_USER'],
+                                    password=config['MONGO_PASSWORD'],
+                                    authSource=config['MONGO_DBNAME'])
+    collection = connection[config['MONGO_DBNAME']]["exampleapp"]
     doc = collection.find_one({"_id": ObjectId(mongoid)})
     # print(doc)
     return render_template('edit.html',mongoid=mongoid, doc=doc)
@@ -105,10 +109,11 @@ def edit_post(mongoid):
     name = request.form['fname']
     message = request.form['fmessage']
 
-    connection = pymongo.MongoClient(mongo_host, 27017, username=mongo_user,
-                                     password=mongo_password,
-                                     authSource=mongo_dbname)
-    collection = connection[mongo_dbname]["exampleapp"]
+    connection = pymongo.MongoClient(config['MONGO_HOST'], 27017, 
+                                    username=config['MONGO_USER'],
+                                    password=config['MONGO_PASSWORD'],
+                                    authSource=config['MONGO_DBNAME'])
+    collection = connection[config['MONGO_DBNAME']]["exampleapp"]
     dt = datetime.datetime.now()
     dt_fmt = dt.strftime("%H:%M on %d %B %Y")
     doc_to_insert = {"_id": ObjectId(mongoid), "name": name, "message": message, "time": dt_fmt}
@@ -123,13 +128,29 @@ def delete(mongoid):
     Route for GET requests to the delete page.
     Deletes the specified record from the database, and then redirects the browser to the read page.
     """
-    connection = pymongo.MongoClient(mongo_host, 27017, username=mongo_user,
-                                     password=mongo_password,
-                                     authSource=mongo_dbname)
-    collection = connection[mongo_dbname]["exampleapp"]
+    connection = pymongo.MongoClient(config['MONGO_HOST'], 27017, 
+                                    username=config['MONGO_USER'],
+                                    password=config['MONGO_PASSWORD'],
+                                    authSource=config['MONGO_DBNAME'])
+    collection = connection[config['MONGO_DBNAME']]["exampleapp"]
     collection.find_one_and_delete({"_id": ObjectId(mongoid)})
     return redirect(url_for('read'))
 
+@app.route('/github-pull')
+def pull():
+    """
+    Route for GitHub webhooks.
+    Anytime new code is pushed to GitHub, we will receive a request at this route.
+    Pulls the latest code from GitHub.
+    """
+    signature = request.headers.get('X-Hub-Signature') 
+    sha, signature = signature.split('=')
+    secret = str.encode(config['SECRET_KEY'])
+
+    hashhex = hmac.new(secret, request.data, digestmod='sha1').hexdigest()
+    if hmac.compare_digest(hashhex, signature):
+        # run a pull from GitHub to update the app's code
+        os.system("git pull {}".format(config['REPO']))
 
 if __name__ == "__main__":
     #import logging
