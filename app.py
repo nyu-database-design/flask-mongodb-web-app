@@ -151,6 +151,7 @@ def pull():
     if hmac.compare_digest(hashhex, signature):
         # run a pull from GitHub to update the app's code
         os.system("git pull {}".format(config['REPO']))
+    return redirect(url_for('read'))
 
 if __name__ == "__main__":
     #import logging
