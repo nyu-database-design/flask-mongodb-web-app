@@ -6,7 +6,7 @@ Project currently hosted at https://i6.cims.nyu.edu/~ab1258/flask-mongodb-exampl
 
 The credentials for logging into a MongoDB database must be stored in a file named `.env`, which is not included in this repository for security reasons.
 
-1. make a copy of the file named `.env.example` and save it as `.env`
+1. make a copy of the file named `env.example` and save it as `.env`
 1. edit the `.env` file and enter your own database credentials into each of the variables where indicated
 
 ## Run locally
@@ -57,16 +57,6 @@ pip3 install -r requirements.txt
 The following steps outline how to host this application on NYU's **i6**.cims.nyu.edu web server. Other servers may vary.
 
 1. Familiarize yourself with web hosting steps on a CIMS server from the link: https://cims.nyu.edu/webapps/content/systems/userservices/webhosting.
-2. Use a file transfer program, such as Cyberduck, to copy your entire project directory to the `/home/$USER/public_html/` directory, where `$USER` is replaced by your own username.
-3. In the root directory of your project, create a file, named `flask.cgi`, and paste the following contents into it, where `myapp` is replaced with your own app's main file name.
-
-```
-#!/usr/bin/python3
-import sys
-sys.path.insert(0, '/misc/linux/centos7/x86_64/local/stow/python-3.6/lib/python3.6/site-packages/')
-from wsgiref.handlers import CGIHandler
-from myapp import app
-CGIHandler().run(app)
-```
-
-4. Your app should now be live at https://i6.cims.nyu.edu/~$USER/$flask-app-directory/flask.cgi, where `$USER` is replaced with your own **i6** username and `$flask-app-directory` is replaced with the name of the sub-directory within `public_html` where your flask app code resides.
+1. Use a file transfer program, such as Cyberduck, to copy your entire project directory to the `/home/$USER/public_html/` directory, where `$USER` is replaced by your own username.
+1. Make the files named `flask.cgi` and `myapp.py` executable by all with the command, `chmod u+x flask.cgi` and `chmod u+x myapp.py`.
+1. Your app should now be live at https://i6.cims.nyu.edu/~$USER/$flask-app-directory/flask.cgi, where `$USER` is replaced with your own **i6** username and `$flask-app-directory` is replaced with the name of the sub-directory within `public_html` where your flask app code resides.
