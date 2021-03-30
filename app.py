@@ -136,10 +136,10 @@ def delete(mongoid):
     collection.find_one_and_delete({"_id": ObjectId(mongoid)})
     return redirect(url_for('read'))
 
-@app.route('/github-pull')
+@app.route('/github-pull', methods=['POST'])
 def pull():
     """
-    Route for GitHub webhooks.
+    Route for GitHub webhooks, which come as POST requests.
     Anytime new code is pushed to GitHub, we will receive a request at this route.
     Pulls the latest code from GitHub.
     """
