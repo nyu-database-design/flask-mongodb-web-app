@@ -132,31 +132,6 @@ def delete(mongoid):
     collection.find_one_and_delete({"_id": ObjectId(mongoid)})
     return redirect(url_for('read'))
 
-@app.route('/webhook', methods=['GET', 'POST'])
-def webhook():
-    """
-    Route for GitHub webhooks, which come as POST requests.
-    Anytime new code is pushed to GitHub, we will receive a request at this route.
-    Pulls the latest code from GitHub.
-    """
-    # signature = request.headers.get('X-Hub-Signature') 
-    # sha, signature = signature.split('=')
-    # secret = str.encode(config['SECRET_KEY'])
-
-    # hashhex = hmac.new(secret, request.data, digestmod='sha1').hexdigest()
-    # if hmac.compare_digest(hashhex, signature):
-        # run a pull from GitHub to update the app's code
-        # os.system("git pull {}".format(config['REPO']))
-    os.system("git pull {}".format(config['GITHUB_REPO']))
-    os.system("chmod a+x flask.cgi")
-    os.system("chmod a+x app.py")
-    # send back a response
-    if request.method == 'POST':
-        print(request.json)
-        return 'success', 200
-    else:
-        abort(400)
-
 if __name__ == "__main__":
     #import logging
     #logging.basicConfig(filename='/home/ak8257/error.log',level=logging.DEBUG)
