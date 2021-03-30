@@ -13,7 +13,9 @@
             <a href="{{ url_for('edit',mongoid=row._id)}}">Edit</a> | <a href="{{ url_for('delete',mongoid=row._id)}}">Delete</a>
             </br>
         </p>
+        <p>
             {{ row.message }}
+        </p>
             
     </div>
     {%endfor%}
