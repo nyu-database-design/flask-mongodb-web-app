@@ -75,7 +75,7 @@ def create_post():
         "created_at": datetime.datetime.utcnow()
     }
     collection = app.db["exampleapp"]
-    collection.insert(doc) # insert a new document
+    collection.insert_one(doc) # insert a new document
 
     return redirect(url_for('read')) # tell the browser to make a request for the /read route
 
