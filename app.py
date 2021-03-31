@@ -134,7 +134,7 @@ def delete(mongoid):
     collection.find_one_and_delete({"_id": ObjectId(mongoid)})
     return redirect(url_for('read'))
 
-@app.route('/webhook', methods=['GET', 'POST'])
+@app.route('/webhook', methods=['POST'])
 def webhook():
     """
     GitHub can be configured such that each time a push is made to a repository, GitHub will make a request to a particular web URL... this is called a webhook.
