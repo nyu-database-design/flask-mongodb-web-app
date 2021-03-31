@@ -146,6 +146,7 @@ def webhook():
         # run a git pull command
         process = subprocess.Popen(["git", "pull"], stdout=subprocess.PIPE)
         pull_output = process.communicate()[0]
+        pull_output = str(pull_output).strip() # remove whitespace
         process = subprocess.Popen(["chmod", "a+x", "flask.cgi"], stdout=subprocess.PIPE)
         chmod_output = process.communicate()[0]
         # send a success response
