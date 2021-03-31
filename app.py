@@ -122,7 +122,7 @@ def delete(mongoid):
     Deletes the specified record from the database, and then redirects the browser to the read page.
     """
     collection = app.db["exampleapp"]
-    collection.find_one_and_delete({"_id": ObjectId(mongoid)})
+    collection.delete_one({"_id": ObjectId(mongoid)})
     return redirect(url_for('read')) # tell the web browser to make a request for the /read route.
 
 @app.route('/webhook', methods=['POST'])
