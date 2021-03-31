@@ -100,16 +100,16 @@ def edit_post(mongoid):
     name = request.form['fname']
     message = request.form['fmessage']
 
+    doc = {
+        "_id": ObjectId(mongoid), 
+        "name": name, 
+        "message": message, 
+        "created_at": datetime.datetime.utcnow()
+    }
     collection = app.db["exampleapp"]
-    collection.find_one_and_update(
+    collection.find_one_and_replace(
         {"_id": ObjectId(mongoid)}, # match criteria
-        {
-            "$set":{
-                "name": name, 
-                "message": message, 
-                "created_at": datetime.datetime.utcnow()
-            }
-        }
+        doc
     )
 
     return redirect(url_for('read')) # tell the browser to make a request for the /read route
