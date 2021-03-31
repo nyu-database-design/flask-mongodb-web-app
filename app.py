@@ -138,8 +138,9 @@ def delete(mongoid):
 def webhook():
     """
     GitHub can be configured such that each time a push is made to a repository, GitHub will make a request to a particular web URL... this is called a webhook.
-    This function is set up such that if it is requested, Python will execute a git pull command from the command line.
-    I have not yet figured out how to have GitHub successfully trigger a request for this URL as a webhook.
+    This function is set up such that if the /webhook route is requested, Python will execute a git pull command from the command line to update this app's codebase.
+    You will need to configure your own repository to have a webhook that requests this route in GitHub's settings.
+    Note that this webhook does do any verification that the request is coming from GitHub... this should be added in a production environment.
     """
     # run a git pull command
     process = subprocess.Popen(["git", "pull"], stdout=subprocess.PIPE)
