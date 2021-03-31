@@ -26,7 +26,7 @@ connection = pymongo.MongoClient(config['MONGO_HOST'], 27017,
                                 username=config['MONGO_USER'],
                                 password=config['MONGO_PASSWORD'],
                                 authSource=config['MONGO_DBNAME'])
-app.db = connection[config['MONGO_DBNAME']] # store a reference to the database
+db = connection[config['MONGO_DBNAME']] # store a reference to the database
 
 # set up the routes
 
@@ -44,8 +44,7 @@ def read():
     Route for GET requests to the read page.
     Displays some information for the user with links to other pages.
     """
-    collection = app.db["exampleapp"]
-    docs = collection.find({}).sort("created_at", -1) # sort in descending order of created_at timestamp
+    docs = db.exampleapp.find({}).sort("created_at", -1) # sort in descending order of created_at timestamp
     return render_template('read.html', docs=docs) # render the read template
 
 
@@ -74,8 +73,7 @@ def create_post():
         "message": message, 
         "created_at": datetime.datetime.utcnow()
     }
-    collection = app.db["exampleapp"]
-    collection.insert_one(doc) # insert a new document
+    db.exampleapp.insert_one(doc) # insert a new document
 
     return redirect(url_for('read')) # tell the browser to make a request for the /read route
 
@@ -86,8 +84,7 @@ def edit(mongoid):
     Route for GET requests to the edit page.
     Displays a form users can fill out to edit an existing record.
     """
-    collection = app.db["exampleapp"]
-    doc = collection.find_one({"_id": ObjectId(mongoid)})
+    doc = db.exampleapp.find_one({"_id": ObjectId(mongoid)})
     return render_template('edit.html', mongoid=mongoid, doc=doc) # render the edit template
 
 
@@ -106,8 +103,8 @@ def edit_post(mongoid):
         "message": message, 
         "created_at": datetime.datetime.utcnow()
     }
-    collection = app.db["exampleapp"]
-    collection.update_one(
+
+    db.exampleapp.update_one(
         {"_id": ObjectId(mongoid)}, # match criteria
         { "$set": doc }
     )
@@ -121,8 +118,7 @@ def delete(mongoid):
     Route for GET requests to the delete page.
     Deletes the specified record from the database, and then redirects the browser to the read page.
     """
-    collection = app.db["exampleapp"]
-    collection.delete_one({"_id": ObjectId(mongoid)})
+    db.exampleapp.delete_one({"_id": ObjectId(mongoid)})
     return redirect(url_for('read')) # tell the web browser to make a request for the /read route.
 
 @app.route('/webhook', methods=['POST'])
