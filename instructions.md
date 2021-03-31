@@ -14,9 +14,9 @@ To speed up development, you may want to have two copies of the example app runn
 
 ## Requirements
 
-You will create a web app that must...
-
 ### Basic requirements
+
+You will create a web app that must...
 
 1. be written in Python, using [flask](https://flask.palletsprojects.com/en/1.1.x/) and [pymongo](https://pymongo.readthedocs.io/en/stable/index.html).
 1. be deployed (i.e. published) to NYU CS Department's web server and MongoDB server, **i6**.cims.nyu.edu and **class-mongodb**.cims.nyu.edu, respectively.
