@@ -73,6 +73,7 @@ def create_post():
     doc_to_insert = {
         "name": name,
         "message": message, 
+        "updated_at": dt,
         "created_at": dt
     }
     collection = app.db["exampleapp"]
@@ -103,14 +104,18 @@ def edit_post(mongoid):
 
     dt = datetime.datetime.now()
     dt_fmt = dt.strftime("%H:%M on %d %B %Y")
-    doc_to_insert = {
-        "_id": ObjectId(mongoid), 
-        "name": name, 
-        "message": message, 
-        "time": dt_fmt
-    }
+
     collection = app.db["exampleapp"]
-    collection.find_one_and_replace({"_id": ObjectId(mongoid)}, doc_to_insert)
+    collection.update_one(
+        {"_id": ObjectId(mongoid)}, # match criteria
+        {
+            "$set":{
+                "name": name, 
+                "message": message, 
+                "updated_at": dt_fmt            
+            }
+        }
+    )
 
     return redirect(url_for('read')) # tell the browser to make a request for the /read route
 
