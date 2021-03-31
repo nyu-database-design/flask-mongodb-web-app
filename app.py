@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 
-from flask import Flask, render_template, request, redirect, url_for, make_response
+from flask import Flask, render_template, request, redirect, abort, url_for, make_response
 from markupsafe import escape
 import pymongo
+import json
 import datetime
 from bson.objectid import ObjectId
 import os
@@ -140,15 +141,21 @@ def webhook():
     This function is set up such that if it is requested, Python will execute a git pull command from the command line.
     I have not yet figured out how to have GitHub successfully trigger a request for this URL as a webhook.
     """
-    # run a git pull command
-    process = subprocess.Popen(["git", "pull"], stdout=subprocess.PIPE)
-    pull_output = process.communicate()[0]
-    process = subprocess.Popen(["chmod", "a+x", "flask.cgi"], stdout=subprocess.PIPE)
-    chmod_output = process.communicate()[0]
-    # send a response
-    response = make_response(make_response('output: {}'.format(pull_output)), 200)
-    response.mimetype = "text/plain"
-    return response
+    if request.method == 'POST':
+        print(request.json)
+        # run a git pull command
+        process = subprocess.Popen(["git", "pull"], stdout=subprocess.PIPE)
+        pull_output = process.communicate()[0]
+        process = subprocess.Popen(["chmod", "a+x", "flask.cgi"], stdout=subprocess.PIPE)
+        chmod_output = process.communicate()[0]
+        # send a success response
+        response = make_response(make_response('output: {}'.format(pull_output)), 200)
+        response.mimetype = "text/plain"
+        return response
+    else:
+        # not a post request
+        print("Not a post request")
+        abort(400)
 
 if __name__ == "__main__":
     #import logging
