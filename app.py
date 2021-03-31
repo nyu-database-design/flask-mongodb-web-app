@@ -22,11 +22,10 @@ if config['FLASK_ENV'] == 'development':
     app.debug = True # debug mnode
 
 # make a single persistent database connection
-connection = pymongo.MongoClient(config['MONGO_HOST'], 27017, 
+app.connection = pymongo.MongoClient(config['MONGO_HOST'], 27017, 
                                 username=config['MONGO_USER'],
                                 password=config['MONGO_PASSWORD'],
                                 authSource=config['MONGO_DBNAME'])
-collection = connection[config['MONGO_DBNAME']]["exampleapp"] # get the collection
 
 # set up the routes
 
@@ -44,6 +43,7 @@ def read():
     Route for GET requests to the read page.
     Displays some information for the user with links to other pages.
     """
+    collection = app.connection[config['MONGO_DBNAME']]["exampleapp"] # get the collection
     docs = collection.find({}).sort("created_at", -1) # sort in descending order of created_at timestamp
     return render_template('read.html', docs=docs) # render the read template
 
@@ -73,6 +73,7 @@ def create_post():
         "message": message, 
         "created_at": dt
     }
+    collection = app.connection[config['MONGO_DBNAME']]["exampleapp"] # get the collection
     collection.insert(doc_to_insert) # insert a new document
 
     return redirect(url_for('read')) # tell the browser to make a request for the /read route
@@ -84,6 +85,7 @@ def edit(mongoid):
     Route for GET requests to the edit page.
     Displays a form users can fill out to edit an existing record.
     """
+    collection = app.connection[config['MONGO_DBNAME']]["exampleapp"] # get the collection
     doc = collection.find_one({"_id": ObjectId(mongoid)})
     return render_template('edit.html', mongoid=mongoid, doc=doc) # render the edit template
 
@@ -100,6 +102,7 @@ def edit_post(mongoid):
     dt = datetime.datetime.now()
     dt_fmt = dt.strftime("%H:%M on %d %B %Y")
     doc_to_insert = {"_id": ObjectId(mongoid), "name": name, "message": message, "time": dt_fmt}
+    collection = app.connection[config['MONGO_DBNAME']]["exampleapp"] # get the collection
     collection.find_one_and_replace({"_id": ObjectId(mongoid)}, doc_to_insert)
 
     return redirect(url_for('read')) # tell the browser to make a request for the /read route
@@ -111,6 +114,7 @@ def delete(mongoid):
     Route for GET requests to the delete page.
     Deletes the specified record from the database, and then redirects the browser to the read page.
     """
+    collection = app.connection[config['MONGO_DBNAME']]["exampleapp"] # get the collection
     collection.find_one_and_delete({"_id": ObjectId(mongoid)})
     return redirect(url_for('read')) # tell the web browser to make a request for the /read route.
 
