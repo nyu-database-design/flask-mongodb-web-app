@@ -75,7 +75,7 @@ def create_post():
         "created_at": datetime.datetime.utcnow()
     }
     collection = app.db["exampleapp"]
-    collection.insert_one(doc) # insert a new document
+    collection.insert(doc) # insert a new document
 
     return redirect(url_for('read')) # tell the browser to make a request for the /read route
 
@@ -101,7 +101,7 @@ def edit_post(mongoid):
     message = request.form['fmessage']
 
     collection = app.db["exampleapp"]
-    collection.update_one(
+    collection.find_one_and_update(
         {"_id": ObjectId(mongoid)}, # match criteria
         {
             "$set":{
