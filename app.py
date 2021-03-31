@@ -44,8 +44,8 @@ def read():
                                     password=config['MONGO_PASSWORD'],
                                     authSource=config['MONGO_DBNAME'])
     collection = connection[config['MONGO_DBNAME']]["exampleapp"]
-    docs = collection.find({}) # sort in descending order of time
-    return render_template('read.html', rows=docs)
+    docs = collection.find({}).sort("created_at", -1) # sort in descending order of created_at timestamp
+    return render_template('read.html', docs=docs) # render the read template
 
 
 @app.route('/create')
@@ -54,7 +54,7 @@ def create():
     Route for GET requests to the create page.
     Displays a form users can fill out to create a new document.
     """
-    return render_template('create.html')
+    return render_template('create.html') # render the create template
 
 
 @app.route('/create', methods=['POST'])
@@ -79,7 +79,7 @@ def create_post():
     }
     collection.insert(doc_to_insert)
 
-    return redirect(url_for('read'))
+    return redirect(url_for('read')) # tell the browser to make a request for the /read route
 
 
 @app.route('/edit/<mongoid>')
@@ -94,8 +94,7 @@ def edit(mongoid):
                                     authSource=config['MONGO_DBNAME'])
     collection = connection[config['MONGO_DBNAME']]["exampleapp"]
     doc = collection.find_one({"_id": ObjectId(mongoid)})
-    # print(doc)
-    return render_template('edit.html', mongoid=mongoid, doc=doc)
+    return render_template('edit.html', mongoid=mongoid, doc=doc) # render the edit template
 
 
 @app.route('/edit/<mongoid>', methods=['POST'])
@@ -117,7 +116,7 @@ def edit_post(mongoid):
     doc_to_insert = {"_id": ObjectId(mongoid), "name": name, "message": message, "time": dt_fmt}
     collection.find_one_and_replace({"_id": ObjectId(mongoid)}, doc_to_insert)
 
-    return redirect(url_for('read'))
+    return redirect(url_for('read')) # tell the browser to make a request for the /read route
 
 
 @app.route('/delete/<mongoid>')
@@ -132,7 +131,7 @@ def delete(mongoid):
                                     authSource=config['MONGO_DBNAME'])
     collection = connection[config['MONGO_DBNAME']]["exampleapp"]
     collection.find_one_and_delete({"_id": ObjectId(mongoid)})
-    return redirect(url_for('read'))
+    return redirect(url_for('read')) # tell the web browser to make a request for the /read route.
 
 @app.route('/webhook', methods=['POST'])
 def webhook():
