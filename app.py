@@ -100,9 +100,6 @@ def edit_post(mongoid):
     name = request.form['fname']
     message = request.form['fmessage']
 
-    dt = datetime.datetime.now()
-    dt_fmt = dt.strftime("%H:%M on %d %B %Y")
-
     collection = app.db["exampleapp"]
     collection.update_one(
         {"_id": ObjectId(mongoid)}, # match criteria
@@ -110,7 +107,7 @@ def edit_post(mongoid):
             "$set":{
                 "name": name, 
                 "message": message, 
-                "created_at": dt_fmt
+                "created_at": datetime.datetime.utcnow()
             }
         }
     )
@@ -125,7 +122,7 @@ def delete(mongoid):
     Deletes the specified record from the database, and then redirects the browser to the read page.
     """
     collection = app.db["exampleapp"]
-    collection.delete_one({"_id": ObjectId(mongoid)})
+    collection.find_one_and_delete({"_id": ObjectId(mongoid)})
     return redirect(url_for('read')) # tell the web browser to make a request for the /read route.
 
 @app.route('/webhook', methods=['POST'])
