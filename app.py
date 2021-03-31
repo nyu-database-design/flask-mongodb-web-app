@@ -45,7 +45,7 @@ def read():
     Displays some information for the user with links to other pages.
     """
     collection = app.db["exampleapp"]
-    docs = collection.find({}).sort("created_at", -1) # sort in descending order of created_at timestamp
+    docs = collection.find({}).sort("updated_at", -1) # sort in descending order of created_at timestamp
     return render_template('read.html', docs=docs) # render the read template
 
 
