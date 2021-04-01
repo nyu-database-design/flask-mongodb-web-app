@@ -136,7 +136,7 @@ def webhook():
     process = subprocess.Popen(["chmod", "a+x", "flask.cgi"], stdout=subprocess.PIPE)
     chmod_output = process.communicate()[0]
     # send a success response
-    response = make_response(make_response('output: {}'.format(pull_output)), 200)
+    response = make_response('output: {}'.format(pull_output), 200)
     response.mimetype = "text/plain"
     return response
 
