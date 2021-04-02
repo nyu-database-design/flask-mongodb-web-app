@@ -52,9 +52,10 @@ If running this app locally, you will not be able to connect to the NYU CS Depar
 
 ### Run the app
 
-1. define two environment variables from the command line: `export FLASK_APP=app` and `export FLASK_ENV=development`
+1. define two environment variables from the command line: `export FLASK_APP=app.py` and `export FLASK_ENV=development`
 1. copy the file named `env.example` into a new file named `.env`, and enter your own MongoDB database connection credentials into that file where indicated.
 1. start flask with `flask run` - this will output an address at which the app is running locally, e.g. https://127.0.0.1:5000. Visit that address in a web browser.
+1. in some cases, the command `flask` will not be found when attempting `flask run`... you can alternatively launch it with `python3 -m flask run --host=0.0.0.0 --port=10000`.
 
 ## Host on a web server
 

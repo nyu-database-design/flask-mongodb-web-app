@@ -140,6 +140,14 @@ def webhook():
     response.mimetype = "text/plain"
     return response
 
+@app.errorhandler(Exception)
+def handle_error(e):
+    """
+    Output any errors - good for debugging.
+    """
+    return render_template('error.html', error=e) # render the edit template
+
+
 if __name__ == "__main__":
     #import logging
     #logging.basicConfig(filename='/home/ak8257/error.log',level=logging.DEBUG)
