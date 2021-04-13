@@ -3,6 +3,7 @@
 
 # visual studio code junk
 .vscode/
+.vscode/settings.json
 
 # emacs backups
 *~
