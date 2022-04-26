@@ -149,6 +149,4 @@ def handle_error(e):
 
 
 if __name__ == "__main__":
-    #import logging
-    #logging.basicConfig(filename='/home/ak8257/error.log',level=logging.DEBUG)
-    app.run(debug = True)
+    app.run()
