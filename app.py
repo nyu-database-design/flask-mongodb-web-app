@@ -5,6 +5,7 @@ from markupsafe import escape
 import pymongo
 import datetime
 from bson.objectid import ObjectId
+from dotenv import load_dotenv
 import os
 import subprocess
 
@@ -13,27 +14,38 @@ app = Flask(__name__)
 
 # load credentials and configuration options from .env file
 # if you do not yet have a file named .env, make one based on the template in env.example
-import credentials
-config = credentials.get()
+load_dotenv()  # take environment variables from .env.
 
 # turn on debugging if in development mode
-if config['FLASK_ENV'] == 'development':
+if os.getenv('FLASK_ENV') == 'development':
     # turn on debugging, if in development
     app.debug = True # debug mnode
 
 # make one persistent connection to the database
-connection = pymongo.MongoClient(config['MONGO_HOST'], 27017, 
-                                username=config['MONGO_USER'],
-                                password=config['MONGO_PASSWORD'],
-                                authSource=config['MONGO_AUTHSOURCE'])
-db = connection[config['MONGO_DBNAME']] # store a reference to the database
+cxn = pymongo.MongoClient(os.getenv('MONGO_HOST'), 27017, 
+                                username=os.getenv('MONGO_USER'),
+                                password=os.getenv('MONGO_PASSWORD'),
+                                authSource=os.getenv('MONGO_AUTHSOURCE'))
+db = cxn[os.getenv('MONGO_DBNAME')] # store a reference to the selected database
+
+# the following try/except block is a way to verify that the database connection is alive (or not)
+try:
+    # verify the connection works by pinging the database
+    cxn.admin.command('ping') # The ping command is cheap and does not require auth.
+    db = cxn[os.getenv('MONGO_DBNAME')] # store a reference to the database
+    print(' *', 'Connected to MongoDB!') # if we get here, the connection worked!
+except Exception as e:
+    # the ping command failed, so the connection is not available.
+    print(' *', "Failed to connect to MongoDB at", os.getenv('MONGO_HOST'))
+    print('Database connection error:', e) # debug
 
 # set up the routes
 
 @app.route('/')
 def home():
     """
-    Route for the home page
+    Route for the home page.
+    Simply returns to the browser the content of the index.html file located in the templates folder.
     """
     return render_template('index.html')
 
