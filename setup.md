@@ -18,7 +18,7 @@ Note that most Python programs require the use of the package manager named `pip
 
 ### Set up a Python virtual environment
 
-There are multiple ways to set up a Python virtual environment... here are instructions for using either `pipenv` or `venv`.
+There are multiple ways to set up a Python virtual environment - a specific area of memory and disk space where you can install the dependencies and settings necessary to run a specific app in isolation from other apps on the same computer... here are instructions for using either `pipenv` or `venv`.
 
 ### Using pipenv
 
