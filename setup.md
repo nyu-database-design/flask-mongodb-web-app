@@ -22,7 +22,7 @@ There are multiple ways to set up a Python virtual environment... here are instr
 
 ### Using pipenv
 
-The ability to make virtual environemnts with `pipenv` does not come pre-installed with Python. It must be installed.
+The ability to make virtual environemnts with [pipenv](https://pypi.org/project/pipenv/) is relatively easy, but it does not come pre-installed with Python. It must be installed.
 
 Install `pipenv` using `pip`:
 
@@ -42,7 +42,7 @@ The file named, `Pipfile` contains a list of dependencies - other Python modules
 
 #### Using venv
 
-If you refuse to use `pipenv` for some reason, you can use `venv` instead. The ability to make virtual environments with`venv` comes included with most distributions of Python.
+If you refuse to use `pipenv` for some reason, you can use the more traditional [venv](https://docs.python.org/3/library/venv.html) instead. The ability to make virtual environments with`venv` comes included with standard Python distributions.
 
 This command creates a new virtual environment with the name `.venv`:
 
@@ -74,7 +74,9 @@ pip3 install -r requirements.txt
 
 ### Set up a local MongoDB database server
 
-If running this app locally, you will not be able to connect to the NYU CS Department's MongoDB server. So you must have your app connect to either a cloud hosted database server, such as [MongoDB Atlas](https://www.mongodb.com/cloud/atlas), or download [MongoDB Community Server](https://www.mongodb.com/try/download/community) and run a local database server on your own machine.
+If running this app locally, you will not be able to connect to the [NYU CS Department's MongoDB server](https://cims.nyu.edu/webapps/content/systems/userservices/databases/class-mongodb). So you must have your app connect to either a cloud hosted database server, such as [MongoDB Atlas](https://www.mongodb.com/cloud/atlas), or run a local database on your own machine using either a [Docker image](https://hub.docker.com/_/mongo/) or downloading and installing [MongoDB Community Server](https://www.mongodb.com/try/download/community) and run a local database server on your own machine.
+
+See [more details](https://knowledge.kitchen/content/courses/database-design/slides/mongodb-setup/#17) about running a MongoDB server in each of these places.
 
 ### Run the app
 
