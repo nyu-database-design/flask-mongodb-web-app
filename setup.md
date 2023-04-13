@@ -12,15 +12,43 @@ To run this app locally, first clone this repository to your local machine...
 
 ... and then do the following:
 
+### pip
+
+Note that most Python programs require the use of the package manager named `pip` - the default Python "package manager". A package manager is software that takes care of installing the correct version of any modules in the correct place for the current system you are running it on. It comes with most distributions of Python. On many machines, the Python 3-compatible version it is calld `pip3` and on others it is simply `pip`... on some either works. If you are unsure, try both in the commands where you see it mentioned.
+
 ### Set up a Python virtual environment
+
+There are multiple ways to set up a Python virtual environment... here are instructions for using either `pipenv` or `venv`.
+
+### Using pipenv
+
+The ability to make virtual environemnts with `pipenv` does not come pre-installed with Python. It must be installed.
+
+Install `pipenv` using `pip`:
+
+```
+pip3 install pipenv
+```
+
+Activate it:
+
+```
+pipenv shell
+```
+
+Your command line will now be running within a virtual environment.
+
+The file named, `Pipfile` contains a list of dependencies - other Python modules that this app depends upon to run. These will have been automatically installed into the virtual environment by `pipenv` when you ran the command `pipenv shell`.
+
+#### Using venv
+
+If you refuse to use `pipenv` for some reason, you can use `venv` instead. The ability to make virtual environments with`venv` comes included with most distributions of Python.
 
 This command creates a new virtual environment with the name `.venv`:
 
 ```bash
 python3 -m venv .venv
 ```
-
-#### Activate the virtual environment
 
 To activate the virtual environment named `.venv`...
 
@@ -36,11 +64,9 @@ On Windows:
 .venv\Scripts\activate.bat
 ```
 
-#### Install the dependencies into the virtual environment
+The `pip` settings file named, `requirements.txt` contains a list of dependencies - other Python modules that this app depends upon to run.
 
-The file named, `requirements.txt` contains a list of dependencies - other Python modules that this app depends upon to run.
-
-To install the dependencies into the currently-active virtual environment, use `pip`, the default Python "package manager" - software that takes care of installing the correct version of any module into your in the correct place for the current environment.
+To install the dependencies into the currently-active virtual environment, use `pip`:
 
 ```bash
 pip3 install -r requirements.txt

@@ -25,7 +25,7 @@ if config['FLASK_ENV'] == 'development':
 connection = pymongo.MongoClient(config['MONGO_HOST'], 27017, 
                                 username=config['MONGO_USER'],
                                 password=config['MONGO_PASSWORD'],
-                                authSource=config['MONGO_DBNAME'])
+                                authSource=config['MONGO_AUTHSOURCE'])
 db = connection[config['MONGO_DBNAME']] # store a reference to the database
 
 # set up the routes
