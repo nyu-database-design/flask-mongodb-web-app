@@ -26,6 +26,10 @@ You will create a web app that must...
 1. represent an amount of effort appropriate for an assignment of this duration and number of developers.
 1. do something useful and/or interesting.
 
+### Advanced option
+
+If you are interested in allowing users of your app to create accounts and log in, you may be interested in the [flask-login](https://pypi.org/project/Flask-Login/) module, which makes it relatively simple to allow users to create accounts, log in and out, and store user credentials in a database of your choosing.
+
 ### Documentation requirements
 
 Delete the contents of the `README.md` file and replace with a well-written, nicely-formatted Markdown document describing your app. Include at least the following:
