@@ -19,7 +19,7 @@ To speed up development, you may want to have two copies of the example app runn
 You will create a web app that must...
 
 1. be written in Python, using [flask](https://flask.palletsprojects.com/en/1.1.x/) and [pymongo](https://pymongo.readthedocs.io/en/stable/index.html).
-1. be deployed (i.e. published) to NYU CS Department's web server and MongoDB server, **i6**.cims.nyu.edu and **class-mongodb**.cims.nyu.edu, respectively.
+1. be deployed (i.e. published) to NYU CS Department's web server and MongoDB server, `i6.cims.nyu.edu` and `class-mongodb.cims.nyu.edu`, respectively.
 1. allow the user to interact with data from the database in an intuitive and effortless manner, not requiring the user to understand any technical details of computer programming or databases.
 1. involve each of the basic operations of **CRUD** on documents in the database, triggered by user interactions.
 1. be well-designed with a clear consistency of design from one web page to the next.

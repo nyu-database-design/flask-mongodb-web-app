@@ -9,9 +9,9 @@
         <hr class="solid">
         <p class="post">
             Posted by {{doc.name}} at {{ doc.created_at.strftime("%H:%M on %d %B %Y") }}
-            </br>
+            <br/>
             <a href="{{ url_for('edit',mongoid=doc._id)}}">Edit</a> | <a href="{{ url_for('delete',mongoid=doc._id)}}">Delete</a>
-            </br>
+            <br/>
         </p>
         <p>
             {{ doc.message }}
