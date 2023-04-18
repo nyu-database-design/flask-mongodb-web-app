@@ -92,12 +92,12 @@ The following steps outline how to host this application on NYU's **i6**.cims.ny
 1. Familiarize yourself with web hosting steps on a CIMS server from the link: https://cims.nyu.edu/webapps/content/systems/userservices/webhosting.
 1. remotely log into the server using `ssh`.
 1. navigate into your web server account's `public_html` directory using `cd public_html`.
-1. clone this repository with `git clone url-to-this-repository`.
-1. navigate into the directory that was created by the clone operation.
+1. clone this repository with `git clone url-to-this-repository`. This will create a sub-directory named after your repository. Note that this command may require you to enter your GitHub usernamen and password. You should enter a GitHub [Personal Access Token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) in place of your password here. You can generate a personal access token from your GitHub account's `Settings` in the `Developer settings` page.
+1. navigate into the sub-directory that was created by the clone operation with `cd flask-app-directory`. If you don't know the sub-directory name, run `ls` to see a list of all files and directories within the `public_html` directory.
 1. copy the file named `env.example` into a new file named `.env` (using `cp env.example .env`).
 1. edit the `.env` file using `emacs .env`, and enter your own MongoDB database connection credentials into that file where indicated. Save the changes within emacs by typing `Control-x` then `Control-s`. Exit emacs by typing, `Control-x` then `Control-c`.
-1. Make the files named `flask.cgi` executable by all with the command, `chmod a+x flask.cgi`.
-1. Your app should now be live on the web at https://i6.cims.nyu.edu/~$USER/$flask-app-directory/flask.cgi, where `$USER` is replaced with your own **i6** username and `$flask-app-directory` is replaced with the name of the sub-directory within `public_html` where your flask app code resides. Visit that address in your preferred web browser.
+1. Make the files named `flask.cgi` executable by all with the command, `chmod a+x flask.cgi`. This allows it to be executed when a web browser requests it.
+1. Your app should now be live on the web at https://i6.cims.nyu.edu/~$USER/$FLASK-APP-DIRECTORY/flask.cgi, where `$USER` is replaced with your own **i6** username and `$FLASK-APP-DIRECTORY` is replaced with the name of the sub-directory within `public_html` where your flask app code resides. Visit that address in your preferred web browser.
 
 ## Continuous deployment
 
