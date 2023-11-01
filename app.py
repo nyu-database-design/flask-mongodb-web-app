@@ -17,123 +17,132 @@ app = Flask(__name__)
 load_dotenv()  # take environment variables from .env.
 
 # turn on debugging if in development mode
-if os.getenv('FLASK_ENV') == 'development':
+if os.getenv("FLASK_ENV") == "development":
     # turn on debugging, if in development
-    app.debug = True # debug mnode
+    app.debug = True  # debug mnode
 
 # make one persistent connection to the database
-cxn = pymongo.MongoClient(os.getenv('MONGO_HOST'), 27017, 
-                                username=os.getenv('MONGO_USER'),
-                                password=os.getenv('MONGO_PASSWORD'),
-                                authSource=os.getenv('MONGO_AUTHSOURCE'))
-db = cxn[os.getenv('MONGO_DBNAME')] # store a reference to the selected database
+cxn = pymongo.MongoClient(
+    os.getenv("MONGO_HOST"),
+    27017,
+    username=os.getenv("MONGO_USER"),
+    password=os.getenv("MONGO_PASSWORD"),
+    authSource=os.getenv("MONGO_AUTHSOURCE"),
+)
+db = cxn[os.getenv("MONGO_DBNAME")]  # store a reference to the selected database
 
 # the following try/except block is a way to verify that the database connection is alive (or not)
 try:
     # verify the connection works by pinging the database
-    cxn.admin.command('ping') # The ping command is cheap and does not require auth.
-    db = cxn[os.getenv('MONGO_DBNAME')] # store a reference to the database
-    print(' *', 'Connected to MongoDB!') # if we get here, the connection worked!
+    cxn.admin.command("ping")  # The ping command is cheap and does not require auth.
+    db = cxn[os.getenv("MONGO_DBNAME")]  # store a reference to the database
+    print(" *", "Connected to MongoDB!")  # if we get here, the connection worked!
 except Exception as e:
     # the ping command failed, so the connection is not available.
-    print(' *', "Failed to connect to MongoDB at", os.getenv('MONGO_HOST'))
-    print('Database connection error:', e) # debug
+    print(" *", "Failed to connect to MongoDB at", os.getenv("MONGO_HOST"))
+    print("Database connection error:", e)  # debug
 
 # set up the routes
 
-@app.route('/')
+
+@app.route("/")
 def home():
     """
     Route for the home page.
     Simply returns to the browser the content of the index.html file located in the templates folder.
     """
-    return render_template('index.html')
+    return render_template("index.html")
 
 
-@app.route('/read')
+@app.route("/read")
 def read():
     """
     Route for GET requests to the read page.
     Displays some information for the user with links to other pages.
     """
-    docs = db.exampleapp.find({}).sort("created_at", -1) # sort in descending order of created_at timestamp
-    return render_template('read.html', docs=docs) # render the read template
+    docs = db.exampleapp.find({}).sort(
+        "created_at", -1
+    )  # sort in descending order of created_at timestamp
+    return render_template("read.html", docs=docs)  # render the read template
 
 
-@app.route('/create')
+@app.route("/create")
 def create():
     """
     Route for GET requests to the create page.
     Displays a form users can fill out to create a new document.
     """
-    return render_template('create.html') # render the create template
+    return render_template("create.html")  # render the create template
 
 
-@app.route('/create', methods=['POST'])
+@app.route("/create", methods=["POST"])
 def create_post():
     """
     Route for POST requests to the create page.
     Accepts the form submission data for a new document and saves the document to the database.
     """
-    name = request.form['fname']
-    message = request.form['fmessage']
-
+    name = request.form["fname"]
+    message = request.form["fmessage"]
 
     # create a new document with the data the user entered
-    doc = {
-        "name": name,
-        "message": message, 
-        "created_at": datetime.datetime.utcnow()
-    }
-    db.exampleapp.insert_one(doc) # insert a new document
+    doc = {"name": name, "message": message, "created_at": datetime.datetime.utcnow()}
+    db.exampleapp.insert_one(doc)  # insert a new document
 
-    return redirect(url_for('read')) # tell the browser to make a request for the /read route
+    return redirect(
+        url_for("read")
+    )  # tell the browser to make a request for the /read route
 
 
-@app.route('/edit/<mongoid>')
+@app.route("/edit/<mongoid>")
 def edit(mongoid):
     """
     Route for GET requests to the edit page.
     Displays a form users can fill out to edit an existing record.
     """
     doc = db.exampleapp.find_one({"_id": ObjectId(mongoid)})
-    return render_template('edit.html', mongoid=mongoid, doc=doc) # render the edit template
+    return render_template(
+        "edit.html", mongoid=mongoid, doc=doc
+    )  # render the edit template
 
 
-@app.route('/edit/<mongoid>', methods=['POST'])
+@app.route("/edit/<mongoid>", methods=["POST"])
 def edit_post(mongoid):
     """
     Route for POST requests to the edit page.
     Accepts the form submission data for the specified document and updates the document in the database.
     """
-    name = request.form['fname']
-    message = request.form['fmessage']
+    name = request.form["fname"]
+    message = request.form["fmessage"]
 
     doc = {
-        # "_id": ObjectId(mongoid), 
-        "name": name, 
-        "message": message, 
-        "created_at": datetime.datetime.utcnow()
+        # "_id": ObjectId(mongoid),
+        "name": name,
+        "message": message,
+        "created_at": datetime.datetime.utcnow(),
     }
 
     db.exampleapp.update_one(
-        {"_id": ObjectId(mongoid)}, # match criteria
-        { "$set": doc }
+        {"_id": ObjectId(mongoid)}, {"$set": doc}  # match criteria
     )
 
-    return redirect(url_for('read')) # tell the browser to make a request for the /read route
+    return redirect(
+        url_for("read")
+    )  # tell the browser to make a request for the /read route
 
 
-@app.route('/delete/<mongoid>')
+@app.route("/delete/<mongoid>")
 def delete(mongoid):
     """
     Route for GET requests to the delete page.
     Deletes the specified record from the database, and then redirects the browser to the read page.
     """
     db.exampleapp.delete_one({"_id": ObjectId(mongoid)})
-    return redirect(url_for('read')) # tell the web browser to make a request for the /read route.
+    return redirect(
+        url_for("read")
+    )  # tell the web browser to make a request for the /read route.
 
-@app.route('/webhook', methods=['POST'])
+
+@app.route("/webhook", methods=["POST"])
 def webhook():
     """
     GitHub can be configured such that each time a push is made to a repository, GitHub will make a request to a particular web URL... this is called a webhook.
@@ -148,19 +157,20 @@ def webhook():
     process = subprocess.Popen(["chmod", "a+x", "flask.cgi"], stdout=subprocess.PIPE)
     chmod_output = process.communicate()[0]
     # send a success response
-    response = make_response('output: {}'.format(pull_output), 200)
+    response = make_response("output: {}".format(pull_output), 200)
     response.mimetype = "text/plain"
     return response
+
 
 @app.errorhandler(Exception)
 def handle_error(e):
     """
     Output any errors - good for debugging.
     """
-    return render_template('error.html', error=e) # render the edit template
+    return render_template("error.html", error=e)  # render the edit template
 
 
 if __name__ == "__main__":
-    #import logging
-    #logging.basicConfig(filename='/home/ak8257/error.log',level=logging.DEBUG)
-    app.run(debug = True)
+    # import logging
+    # logging.basicConfig(filename='/home/ak8257/error.log',level=logging.DEBUG)
+    app.run(debug=True)
