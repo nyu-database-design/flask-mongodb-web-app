@@ -10,12 +10,12 @@ import pymongo
 from bson.objectid import ObjectId
 from dotenv import load_dotenv
 
-# instantiate the app
-app = Flask(__name__)
-
 # load credentials and configuration options from .env file
 # if you do not yet have a file named .env, make one based on the template in env.example
 load_dotenv()  # take environment variables from .env.
+
+# instantiate the app
+app = Flask(__name__)
 
 # # turn on debugging if in development mode
 # if os.getenv("FLASK_ENV", "development") == "development":
@@ -170,4 +170,4 @@ if __name__ == "__main__":
 
     # import logging
     # logging.basicConfig(filename='/home/ak8257/error.log',level=logging.DEBUG)
-    app.run(port=FLASK_PORT, debug=True)
+    app.run(port=FLASK_PORT)
