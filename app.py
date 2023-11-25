@@ -3,7 +3,8 @@
 import os
 import subprocess
 import datetime
-import logging
+
+# import logging
 from flask import Flask, render_template, request, redirect, url_for, make_response
 
 # from markupsafe import escape
@@ -166,5 +167,5 @@ def handle_error(e):
 
 # run the app
 if __name__ == "__main__":
-    logging.basicConfig(filename="./flask_error.log", level=logging.DEBUG)
+    # logging.basicConfig(filename="./flask_error.log", level=logging.DEBUG)
     app.run(load_dotenv=True)
