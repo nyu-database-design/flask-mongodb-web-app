@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 
-from flask import Flask, render_template, request, redirect, url_for, make_response
-from markupsafe import escape
-import pymongo
-import datetime
-from bson.objectid import ObjectId
-from dotenv import load_dotenv
 import os
 import subprocess
+import datetime
+from flask import Flask, render_template, request, redirect, url_for, make_response
+
+# from markupsafe import escape
+import pymongo
+from bson.objectid import ObjectId
+from dotenv import load_dotenv
 
 # instantiate the app
 app = Flask(__name__)
@@ -16,31 +17,23 @@ app = Flask(__name__)
 # if you do not yet have a file named .env, make one based on the template in env.example
 load_dotenv()  # take environment variables from .env.
 
-# turn on debugging if in development mode
-if os.getenv("FLASK_ENV") == "development":
-    # turn on debugging, if in development
-    app.debug = True  # debug mnode
+# # turn on debugging if in development mode
+# if os.getenv("FLASK_ENV", "development") == "development":
+#     # turn on debugging, if in development
+#     app.debug = True  # debug mnode
 
-# make one persistent connection to the database
-cxn = pymongo.MongoClient(
-    os.getenv("MONGO_HOST"),
-    27017,
-    username=os.getenv("MONGO_USER"),
-    password=os.getenv("MONGO_PASSWORD"),
-    authSource=os.getenv("MONGO_AUTHSOURCE"),
-)
+# connect to the database
+cxn = pymongo.MongoClient(os.getenv("MONGO_URI"))
 db = cxn[os.getenv("MONGO_DBNAME")]  # store a reference to the selected database
 
 # the following try/except block is a way to verify that the database connection is alive (or not)
 try:
     # verify the connection works by pinging the database
     cxn.admin.command("ping")  # The ping command is cheap and does not require auth.
-    db = cxn[os.getenv("MONGO_DBNAME")]  # store a reference to the database
     print(" *", "Connected to MongoDB!")  # if we get here, the connection worked!
 except Exception as e:
     # the ping command failed, so the connection is not available.
-    print(" *", "Failed to connect to MongoDB at", os.getenv("MONGO_HOST"))
-    print("Database connection error:", e)  # debug
+    print(" * MongoDB connection error:", e)  # debug
 
 # set up the routes
 
@@ -157,7 +150,7 @@ def webhook():
     process = subprocess.Popen(["chmod", "a+x", "flask.cgi"], stdout=subprocess.PIPE)
     chmod_output = process.communicate()[0]
     # send a success response
-    response = make_response("output: {}".format(pull_output), 200)
+    response = make_response(f"output: {pull_output}", 200)
     response.mimetype = "text/plain"
     return response
 
@@ -170,7 +163,11 @@ def handle_error(e):
     return render_template("error.html", error=e)  # render the edit template
 
 
+# run the app
 if __name__ == "__main__":
+    # use the PORT environment variable, or default to 5000
+    FLASK_PORT = os.getenv("FLASK_PORT", "5000")
+
     # import logging
     # logging.basicConfig(filename='/home/ak8257/error.log',level=logging.DEBUG)
-    app.run(debug=True)
+    app.run(port=FLASK_PORT, debug=True)
