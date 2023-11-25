@@ -3,6 +3,7 @@
 import os
 import subprocess
 import datetime
+import logging
 from flask import Flask, render_template, request, redirect, url_for, make_response
 
 # from markupsafe import escape
@@ -165,9 +166,5 @@ def handle_error(e):
 
 # run the app
 if __name__ == "__main__":
-    # use the PORT environment variable, or default to 5000
-    FLASK_PORT = os.getenv("FLASK_PORT", "5000")
-
-    # import logging
-    # logging.basicConfig(filename='/home/ak8257/error.log',level=logging.DEBUG)
-    app.run(port=FLASK_PORT)
+    logging.basicConfig(filename="./flask_error.log", level=logging.DEBUG)
+    app.run(load_dotenv=True)
