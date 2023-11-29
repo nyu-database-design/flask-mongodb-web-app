@@ -15,6 +15,7 @@ pymongo = "==3.11.3"
 python-dotenv = "==0.16.0"
 werkzeug = "==1.0.1"
 sentry-sdk = {extras = ["flask"], version = "*"}
+urllib3 = "==1.26.6"
 
 [dev-packages]
 
