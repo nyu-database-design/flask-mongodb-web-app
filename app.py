@@ -1,41 +1,64 @@
 #!/usr/bin/env python3
 
 import os
+import sys
 import subprocess
 import datetime
 
-# import logging
 from flask import Flask, render_template, request, redirect, url_for, make_response
+
+# import logging
+import sentry_sdk
+from sentry_sdk.integrations.flask import (
+    FlaskIntegration,
+)  # delete this if not using sentry.io
 
 # from markupsafe import escape
 import pymongo
+from pymongo.errors import ConnectionFailure
 from bson.objectid import ObjectId
 from dotenv import load_dotenv
 
 # load credentials and configuration options from .env file
 # if you do not yet have a file named .env, make one based on the template in env.example
-load_dotenv()  # take environment variables from .env.
+load_dotenv(override=True)  # take environment variables from .env.
+
+# initialize Sentry for help debugging... this requires an account on sentrio.io
+# you will need to set the SENTRY_DSN environment variable to the value provided by Sentry
+# delete this if not using sentry.io
+sentry_sdk.init(
+    dsn=os.getenv("SENTRY_DSN"),
+    enable_tracing=True,
+    # Set traces_sample_rate to 1.0 to capture 100%
+    # of transactions for performance monitoring.
+    traces_sample_rate=1.0,
+    # Set profiles_sample_rate to 1.0 to profile 100%
+    # of sampled transactions.
+    # We recommend adjusting this value in production.
+    profiles_sample_rate=1.0,
+)
 
 # instantiate the app
 app = Flask(__name__)
 
 # # turn on debugging if in development mode
-# if os.getenv("FLASK_ENV", "development") == "development":
-#     # turn on debugging, if in development
-#     app.debug = True  # debug mnode
+# app.debug = True if os.getenv("FLASK_ENV", "development") == "development" else False
 
-# connect to the database
-cxn = pymongo.MongoClient(os.getenv("MONGO_URI"))
-db = cxn[os.getenv("MONGO_DBNAME")]  # store a reference to the selected database
-
-# the following try/except block is a way to verify that the database connection is alive (or not)
+# try to connect to the database, and quit if it doesn't work
 try:
+    cxn = pymongo.MongoClient(os.getenv("MONGO_URI"))
+    db = cxn[os.getenv("MONGO_DBNAME")]  # store a reference to the selected database
+
     # verify the connection works by pinging the database
     cxn.admin.command("ping")  # The ping command is cheap and does not require auth.
-    print(" *", "Connected to MongoDB!")  # if we get here, the connection worked!
-except Exception as e:
+    print(" * Connected to MongoDB!")  # if we get here, the connection worked!
+except ConnectionFailure as e:
+    # catch any database errors
     # the ping command failed, so the connection is not available.
     print(" * MongoDB connection error:", e)  # debug
+    sentry_sdk.capture_exception(e)  # send the error to sentry.io. delete if not using
+    sys.exit(1)  # this is a catastrophic error, so no reason to continue to live
+
 
 # set up the routes
 
@@ -93,6 +116,9 @@ def edit(mongoid):
     """
     Route for GET requests to the edit page.
     Displays a form users can fill out to edit an existing record.
+
+    Parameters:
+    mongoid (str): The MongoDB ObjectId of the record to be edited.
     """
     doc = db.exampleapp.find_one({"_id": ObjectId(mongoid)})
     return render_template(
@@ -105,6 +131,9 @@ def edit_post(mongoid):
     """
     Route for POST requests to the edit page.
     Accepts the form submission data for the specified document and updates the document in the database.
+
+    Parameters:
+    mongoid (str): The MongoDB ObjectId of the record to be edited.
     """
     name = request.form["fname"]
     message = request.form["fmessage"]
@@ -130,6 +159,9 @@ def delete(mongoid):
     """
     Route for GET requests to the delete page.
     Deletes the specified record from the database, and then redirects the browser to the read page.
+
+    Parameters:
+    mongoid (str): The MongoDB ObjectId of the record to be deleted.
     """
     db.exampleapp.delete_one({"_id": ObjectId(mongoid)})
     return redirect(
