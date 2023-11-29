@@ -106,6 +106,19 @@ The following steps outline how to host this application on NYU's **i6**.cims.ny
 1. Make the files named `flask.cgi` executable by all with the command, `chmod a+x flask.cgi`. This allows it to be executed when a web browser requests it.
 1. Your app should now be live on the web at https://i6.cims.nyu.edu/~$USER/$FLASK-APP-DIRECTORY/flask.cgi, where `$USER` is replaced with your own **i6** username and `$FLASK-APP-DIRECTORY` is replaced with the name of the sub-directory within `public_html` where your flask app code resides. Visit that address in your preferred web browser.
 
+## Debugging
+
+Debugging errors on web servers can be tricky, especially when you see errors in the web browser but no details of what went wrong.
+
+## on the command line
+Log into the command shell of the computer where you are running the application (either your local computer or the web server), and try to run the `app.py` file as a regular Python script, e.g. `python3 app.py`.  You will often see simple errors reported this way that you wouldn't otherwise see.
+
+## on sentry.io
+In the instructions, we have asked you to setup an account with sentry.io, a service that logs errors in a hosted web interface.  This may be very helpful in understanding errors that occur as you run your applications.
+- By default, sentry.io will show errors in the `Issues` tab of its web interface and will email them to you as they occur.
+- If loading your web app in a web browser shows an error, check the sentry.io `Issues` tab to see whether an error has been reported there.
+- You can turn off the email notifications in their settings if you prefer not to receive them.
+
 ## Continuous deployment
 
 While not required, it is possible to automatically update a copy of this web app anytime new changes to the code are pushed to GitHub. Such an automatic update of a deployed web app is known as "continuous deployment".
