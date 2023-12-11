@@ -18,6 +18,8 @@ To run this app locally, first clone this repository to your local machine...
 1. Create a new project on sentry.io.
 1. Copy the `DSN` string from the sentry.io project settings page.  You will later paste into a filed named `.env` according to the instructions below.
 
+Once the free trial ends, Sentry will suggest switching to a paid account... **there is no need to pay**.  You can continue to use the free account.
+
 ### pip
 
 Note that most Python programs require the use of the package manager named `pip` - the default Python "package manager". A package manager is software that takes care of installing the correct version of any modules in the correct place for the current system you are running it on. It comes with most distributions of Python. On many machines, the Python 3-compatible version it is calld `pip3` and on others it is simply `pip`... on some either works. If you are unsure, try both in the commands where you see it mentioned.
