@@ -35,7 +35,6 @@ sentry_sdk.init(
     # We recommend adjusting this value in production.
     profiles_sample_rate=1.0,
     integrations=[FlaskIntegration()],
-    traces_sample_rate=1.0,
     send_default_pii=True,
 )
 
